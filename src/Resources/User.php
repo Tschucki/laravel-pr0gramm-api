@@ -2,7 +2,6 @@
 
 namespace Tschucki\Pr0grammApi\Resources;
 
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Http;
 use Tschucki\Pr0grammApi\Collections\Pr0grammUser;
 
