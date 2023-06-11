@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Tschucki\Pr0grammApi\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class Pr0grammApiCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-pr0gramm-api';
 
     public $description = 'My command';
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace VendorName\Skeleton\Database\Factories;
+namespace Tschucki\Pr0grammApi\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
