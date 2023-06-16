@@ -29,4 +29,9 @@ class Pr0grammApi extends Facade
     {
         return static::getFacadeRoot()->user();
     }
+
+    public static function Post(): Post
+    {
+        return static::getFacadeRoot()->post();
+    }
 }

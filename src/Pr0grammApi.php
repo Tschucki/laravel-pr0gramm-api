@@ -2,9 +2,11 @@
 
 namespace Tschucki\Pr0grammApi;
 
-use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\Client\RequestException;
+use Tschucki\Pr0grammApi\Helpers\ApiResponseHelper;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
+use Tschucki\Pr0grammApi\Resources\Post;
 use Tschucki\Pr0grammApi\Resources\User;
 
 class Pr0grammApi
@@ -42,9 +44,14 @@ class Pr0grammApi
         return $response->json();
     }
 
+    /**
+     * @throws RequestException
+     */
     public static function loggedIn()
     {
         $response = self::$client::withHeaders(['Cookie' => self::$cookie])->get(self::$baseUrl.'user/loggedin');
+
+        ApiResponseHelper::checkApiResponse($response);
 
         return $response->json();
     }
@@ -52,5 +59,10 @@ class Pr0grammApi
     public static function user(): User
     {
         return new User(self::$baseUrl, self::$cookie);
+    }
+
+    public static function post(): Post
+    {
+        return new Post(self::$baseUrl, self::$cookie);
     }
 }
