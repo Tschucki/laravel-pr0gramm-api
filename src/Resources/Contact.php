@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Tschucki\Pr0grammApi\Enums\Vote;
 use Tschucki\Pr0grammApi\Helpers\ApiResponseHelper;
 
-class Post
+class Contact
 {
     private Http $client;
 
@@ -34,22 +34,14 @@ class Post
     /**
      * @throws RequestException
      */
-    public function get(array $settings = []): \Illuminate\Http\Client\Response
+    public function report(int $itemId, string $customReason, int $commentId = 0, string $reason = 'custom'): \Illuminate\Http\Client\Response
     {
-        $response = $this->client::withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'items/get', $settings);
-
-        ApiResponseHelper::checkApiResponse($response);
-
-        return $response;
-    }
-
-    /**
-     * @throws RequestException
-     */
-    public function info(int $itemId): \Illuminate\Http\Client\Response
-    {
-        $response = $this->client::withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'items/info', [
+        $response = $this->client::asForm()->withHeaders(['Cookie' => $this->cookie])->post($this->baseUrl.'contact/report', [
+            '_nonce' => $this->nonce,
             'itemId' => $itemId,
+            'commentId' => $commentId,
+            'reason' => $reason,
+            'customReason' => $customReason,
         ]);
 
         ApiResponseHelper::checkApiResponse($response);
@@ -60,11 +52,11 @@ class Post
     /**
      * @throws RequestException
      */
-    public function vote(int $itemId, Vote $vote): \Illuminate\Http\Client\Response
+    public function vote(int $commentId, Vote $vote): \Illuminate\Http\Client\Response
     {
-        $response = $this->client::asForm()->withHeaders(['Cookie' => $this->cookie])->post($this->baseUrl.'items/vote', [
+        $response = $this->client::asForm()->withHeaders(['Cookie' => $this->cookie])->post($this->baseUrl.'comments/vote', [
             '_nonce' => $this->nonce,
-            'id' => $itemId,
+            'id' => $commentId,
             'vote' => $vote->value,
         ]);
 

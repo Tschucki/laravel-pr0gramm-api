@@ -13,13 +13,16 @@ class User
 
     private string $baseUrl;
 
-    private ?string $cookie;
+    private ?string $cookie = null;
 
     public function __construct($baseUrl, $cookie)
     {
         $this->client = new Http();
         $this->baseUrl = $baseUrl;
         $this->cookie = $cookie;
+        if ($this->cookie == null) {
+            throw new \Exception('No Pr0gramm cookie found. Please login first or set a cookie in the configs.');
+        }
     }
 
     /**
@@ -37,7 +40,7 @@ class User
     /**
      * @throws RequestException
      */
-    public function sync(int $offset = 0)
+    public function sync(int $offset = 0): \Illuminate\Http\Client\Response
     {
         $response = $this->client::withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'user/sync', [
             'offset' => $offset,
@@ -51,9 +54,8 @@ class User
     /**
      * @throws RequestException
      */
-    public function info(string $name = null, int $flags = 15): \GuzzleHttp\Promise\PromiseInterface|\Illuminate\Http\Client\Response
+    public function info(string $name = null, int $flags = 15): \Illuminate\Http\Client\Response
     {
-
         if ($name === null) {
             $response = $this->client::withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'user/info');
         } else {
@@ -71,7 +73,7 @@ class User
     /**
      * @throws RequestException
      */
-    public function captcha(): \GuzzleHttp\Promise\PromiseInterface|\Illuminate\Http\Client\Response
+    public function captcha(): \Illuminate\Http\Client\Response
     {
         $response = $this->client::withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'user/captcha');
 

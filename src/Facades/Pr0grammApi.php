@@ -3,6 +3,8 @@
 namespace Tschucki\Pr0grammApi\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use Tschucki\Pr0grammApi\Resources\Comment;
+use Tschucki\Pr0grammApi\Resources\Post;
 use Tschucki\Pr0grammApi\Resources\User;
 
 /**
@@ -25,6 +27,11 @@ class Pr0grammApi extends Facade
         return static::getFacadeRoot()->loggedIn();
     }
 
+    public static function logout()
+    {
+        return static::getFacadeRoot()->logout();
+    }
+
     public static function User(): User
     {
         return static::getFacadeRoot()->user();
@@ -33,5 +40,10 @@ class Pr0grammApi extends Facade
     public static function Post(): Post
     {
         return static::getFacadeRoot()->post();
+    }
+
+    public static function Comment(): Comment
+    {
+        return static::getFacadeRoot()->comment();
     }
 }

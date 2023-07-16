@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Tschucki\Pr0grammApi\Enums\Vote;
 use Tschucki\Pr0grammApi\Helpers\ApiResponseHelper;
 
-class Post
+class Comment
 {
     private Http $client;
 
@@ -34,22 +34,13 @@ class Post
     /**
      * @throws RequestException
      */
-    public function get(array $settings = []): \Illuminate\Http\Client\Response
+    public function add(int $itemId, string $comment, int $parentId = null): \Illuminate\Http\Client\Response
     {
-        $response = $this->client::withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'items/get', $settings);
-
-        ApiResponseHelper::checkApiResponse($response);
-
-        return $response;
-    }
-
-    /**
-     * @throws RequestException
-     */
-    public function info(int $itemId): \Illuminate\Http\Client\Response
-    {
-        $response = $this->client::withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'items/info', [
+        $response = $this->client::asForm()->withHeaders(['Cookie' => $this->cookie])->post($this->baseUrl.'comments/post', [
+            '_nonce' => $this->nonce,
             'itemId' => $itemId,
+            'comment' => $comment,
+            'parentId' => $parentId,
         ]);
 
         ApiResponseHelper::checkApiResponse($response);
@@ -58,13 +49,23 @@ class Post
     }
 
     /**
+     * @throws \Exception
+     */
+    public function delete(int $itemId, int $commentId): \Illuminate\Http\Client\Response
+    {
+        $contact = new Contact($this->baseUrl, $this->cookie, $this->nonce);
+
+        return $contact->report(itemId: $itemId, customReason: 'Ich habe diesen Beitrag selbst erstellt und möchte ihn gelöscht haben', commentId: $commentId);
+    }
+
+    /**
      * @throws RequestException
      */
-    public function vote(int $itemId, Vote $vote): \Illuminate\Http\Client\Response
+    public function vote(int $commentId, Vote $vote): \Illuminate\Http\Client\Response
     {
-        $response = $this->client::asForm()->withHeaders(['Cookie' => $this->cookie])->post($this->baseUrl.'items/vote', [
+        $response = $this->client::asForm()->withHeaders(['Cookie' => $this->cookie])->post($this->baseUrl.'comments/vote', [
             '_nonce' => $this->nonce,
-            'id' => $itemId,
+            'id' => $commentId,
             'vote' => $vote->value,
         ]);
 
