@@ -1,5 +1,6 @@
 {
     "name": "tschucki/laravel-pr0gramm-api",
+    "version": "1.0.0",
     "description": "Use Pr0gramm API",
     "keywords": [
         "Tschucki",
