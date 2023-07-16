@@ -72,7 +72,7 @@ class Pr0grammApi
      * @throws RequestException
      * @throws \Exception
      */
-    public static function login(string $username, string $password, $captcha = null, $token = null)
+    public static function login(string $username, string $password, string $captcha = null, string $token = null): mixed
     {
         if (self::loggedIn()['loggedIn']) {
             self::logout();
@@ -108,7 +108,7 @@ class Pr0grammApi
      * @throws RequestException
      * @throws \Exception
      */
-    public static function logout()
+    public static function logout(): mixed
     {
         if (! self::loggedIn()['loggedIn']) {
             return 'Already logged out';
@@ -125,7 +125,7 @@ class Pr0grammApi
     /**
      * @throws RequestException
      */
-    public static function loggedIn()
+    public static function loggedIn(): mixed
     {
         $response = self::$client::withHeaders(['Cookie' => self::$cookie])->get(self::$baseUrl.'user/loggedin');
 

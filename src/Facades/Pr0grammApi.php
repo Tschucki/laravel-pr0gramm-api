@@ -21,9 +21,9 @@ class Pr0grammApi extends Facade
         return \Tschucki\Pr0grammApi\Pr0grammApi::class;
     }
 
-    public static function login($username, $password)
+    public static function login(string $username, string $password, string $captcha = null, string $token = null): mixed
     {
-        return static::getFacadeRoot()->login($username, $password);
+        return static::getFacadeRoot()->login($username, $password, $captcha, $token);
     }
 
     public static function Captcha(): Captcha
@@ -31,12 +31,12 @@ class Pr0grammApi extends Facade
         return static::getFacadeRoot()->captcha();
     }
 
-    public static function loggedIn()
+    public static function loggedIn(): mixed
     {
         return static::getFacadeRoot()->loggedIn();
     }
 
-    public static function logout()
+    public static function logout(): mixed
     {
         return static::getFacadeRoot()->logout();
     }

@@ -20,7 +20,7 @@ class Post
     /**
      * @throws \Exception
      */
-    public function __construct($baseUrl, $cookie, $nonce)
+    public function __construct(string $baseUrl, string $cookie, string $nonce)
     {
         $this->client = new Http();
         $this->baseUrl = $baseUrl;

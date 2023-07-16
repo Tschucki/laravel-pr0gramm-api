@@ -2,6 +2,7 @@
 
 namespace Tschucki\Pr0grammApi\Collections;
 
+use Illuminate\Http\Client\Response;
 use JsonSerializable;
 
 class Captcha implements JsonSerializable
@@ -13,7 +14,7 @@ class Captcha implements JsonSerializable
 
     public mixed $token;
 
-    public function __construct($captchaData)
+    public function __construct(Response $captchaData)
     {
         $this->base64Captcha = $captchaData['captcha'] ?? '';
         $this->token = $captchaData['token'];

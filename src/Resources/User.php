@@ -18,7 +18,7 @@ class User
 
     private ?string $nonce;
 
-    public function __construct($baseUrl, $cookie, $nonce)
+    public function __construct(string $baseUrl, string $cookie, string $nonce)
     {
         $this->client = new Http();
         $this->baseUrl = $baseUrl;
@@ -82,7 +82,7 @@ class User
     /**
      * @throws RequestException
      */
-    public function changeEmail($currentPassword, $newEmail): \Illuminate\Http\Client\Response
+    public function changeEmail(string $currentPassword, string $newEmail): \Illuminate\Http\Client\Response
     {
         $response = $this->client::asForm()->withHeaders(['Cookie' => $this->cookie])->post($this->baseUrl.'user/requestemailchange', [
             '_nonce' => $this->nonce,

@@ -17,7 +17,7 @@ class Profile
     /**
      * @throws \Exception
      */
-    public function __construct($baseUrl, $cookie)
+    public function __construct(string $baseUrl, string $cookie)
     {
         $this->client = new Http();
         $this->baseUrl = $baseUrl;
@@ -30,7 +30,7 @@ class Profile
     /**
      * @throws RequestException
      */
-    public function comments(string $name, int $flags = 15, $before = 0, int $after = 0): \Illuminate\Http\Client\Response
+    public function comments(string $name, int $flags = 15, int $before = 0, int $after = 0): \Illuminate\Http\Client\Response
     {
         $response = $this->client::asForm()->withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'profile/comments', [
             'name' => $name,
@@ -47,7 +47,7 @@ class Profile
     /**
      * @throws RequestException
      */
-    public function commentLikes(string $name, $before, int $flags = 15, int $after = 0): \Illuminate\Http\Client\Response
+    public function commentLikes(string $name, int $before, int $flags = 15, int $after = 0): \Illuminate\Http\Client\Response
     {
         $response = $this->client::asForm()->withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'profile/comments', [
             'name' => $name,
