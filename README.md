@@ -1,19 +1,14 @@
-# Use Pr0gramm API
+# Laravel Pr0gramm API
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/tschucki/laravel-pr0gramm-api.svg?style=flat-square)](https://packagist.org/packages/tschucki/laravel-pr0gramm-api)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/tschucki/laravel-pr0gramm-api/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/tschucki/laravel-pr0gramm-api/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/tschucki/laravel-pr0gramm-api/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/tschucki/laravel-pr0gramm-api/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/tschucki/laravel-pr0gramm-api.svg?style=flat-square)](https://packagist.org/packages/tschucki/laravel-pr0gramm-api)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+This package provides a Laravel wrapper for the [Pr0gramm API](https://github.com/pr0gramm-com/api-docs) by [Pr0gramm](https://pr0gramm.com).
+This package is not affiliated with Pr0gramm. I created it for my own use on other projects.
 
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-pr0gramm-api.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-pr0gramm-api)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+I will try to keep this package up to date with the API and imporve it over time. If you find any bugs or have any suggestions, feel free to open an issue or a PR.
 
 ## Installation
 
@@ -23,43 +18,92 @@ You can install the package via composer:
 composer require tschucki/laravel-pr0gramm-api
 ```
 
-You can publish and run the migrations with:
+You don't need to publish any config files. The package will work out of the box. 
+You just have to log in to Pr0gramm, to get some user related request. (For example conversations or votings)
 
-```bash
-php artisan vendor:publish --tag="laravel-pr0gramm-api-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="laravel-pr0gramm-api-config"
-```
-
-This is the contents of the published config file:
+But if you want to provide your pr0gramm cookie, you can add this to your `services.php`.
 
 ```php
-return [
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="laravel-pr0gramm-api-views"
+    'pr0gramm' => [
+        'cookie' => env('PR0GRAMM_COOKIE'),
+    ]
 ```
 
 ## Usage
 
+It is recommended to use the facade `Pr0grammApi` to access the API.
+
 ```php
-$pr0grammApi = new Tschucki\Pr0grammApi();
-echo $pr0grammApi->echoPhrase('Hello, Tschucki!');
+Pr0grammApi::User()->me();
 ```
 
-## Testing
+You can access all endpoints of the API:
+- User
+- Post
+- Tag
+- Comment
+- Contact
+- Inbox
+- Profile
 
-```bash
-composer test
+## Login to your account
+
+To log in to your account, you can use the `login` method.
+It will create a new Session and stores the cookie for you.
+Afterwards you don't need to provide the cookie on every request.
+When using a non-bot account, you have to provide a captcha and token parameter (You can get the captcha and token via `Pr0grammApi::Captcha`).
+
+You can ignore this, when you already provided the cookie in your `services.php`. You can copy your Cookie from the Dev-Tools, while logged in for example.
+
+```php
+Pr0grammApi::login('Gamb', 'Quatschtütenwürger25')
+```
+
+## Logout of your account
+
+Logging out will delete the session and the cookie.
+You have to log in again, to access user related endpoints. Otherwise, you will get an Exception.
+
+```php
+Pr0grammApi::logout()
+```
+
+### Examples
+
+#### Retrieving the current user
+
+```php
+$currentUser = Pr0grammApi::User()->me();
+```
+
+#### Retrieving info about a user
+
+```php
+$userInfo = Pr0grammApi::User()->info('Gamb');
+```
+
+#### Voting a post
+
+```php
+use Tschucki\Pr0grammApi\Enums\Vote;
+
+Pr0grammApi::Post()->vote(1, Vote::UP);
+```
+
+#### Add a comment
+
+```php
+// Add comment to post with id 1
+Pr0grammApi::Comment()->add(1, 'Das Ablecken von Türknöpfen ist auf anderen Planeten illegal.');
+
+// Add comment to another comment
+Pr0grammApi::Comment()->add(1, 'Ich bin ne gute Nudel', 22);
+```
+
+#### Get Comments from Inbox
+
+```php
+Pr0grammApi::Inbox()->comments();
 ```
 
 ## Changelog
@@ -68,15 +112,10 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+Feel free to open a PR or an issue. I will try to respond as soon as possible.
 
 ## Credits
 
-- [Marcel Wagner](https://github.com/Tschucki)
 - [All Contributors](../../contributors)
 
 ## License
