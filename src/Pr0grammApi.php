@@ -139,7 +139,7 @@ class Pr0grammApi
      */
     public static function user(): User
     {
-        return new User(self::$baseUrl, self::$cookie);
+        return new User(self::$baseUrl, self::$cookie, self::$nonce);
     }
 
     /**

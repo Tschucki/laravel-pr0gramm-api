@@ -5,6 +5,7 @@ namespace Tschucki\Pr0grammApi\Resources;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use Tschucki\Pr0grammApi\Collections\Pr0grammUser;
+use Tschucki\Pr0grammApi\Facades\Pr0grammApi;
 use Tschucki\Pr0grammApi\Helpers\ApiResponseHelper;
 
 class User
@@ -13,13 +14,16 @@ class User
 
     private string $baseUrl;
 
-    private ?string $cookie = null;
+    private ?string $cookie;
 
-    public function __construct($baseUrl, $cookie)
+    private ?string $nonce;
+
+    public function __construct($baseUrl, $cookie, $nonce)
     {
         $this->client = new Http();
         $this->baseUrl = $baseUrl;
         $this->cookie = $cookie;
+        $this->nonce = $nonce;
         if ($this->cookie == null) {
             throw new \Exception('No Pr0gramm cookie found. Please login first or set a cookie in the configs.');
         }
@@ -70,12 +74,55 @@ class User
         return $response;
     }
 
+    public function captcha(): \Tschucki\Pr0grammApi\Collections\Captcha
+    {
+        return Pr0grammApi::Captcha();
+    }
+
     /**
      * @throws RequestException
      */
-    public function captcha(): \Illuminate\Http\Client\Response
+    public function changeEmail($currentPassword, $newEmail): \Illuminate\Http\Client\Response
     {
-        $response = $this->client::withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'user/captcha');
+        $response = $this->client::asForm()->withHeaders(['Cookie' => $this->cookie])->post($this->baseUrl.'user/requestemailchange', [
+            '_nonce' => $this->nonce,
+            'password' => $currentPassword,
+            'email' => $newEmail,
+        ]);
+
+        ApiResponseHelper::checkApiResponse($response);
+
+        return $response;
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function changePassword(string $currentPassword, string $newPassword): \Illuminate\Http\Client\Response
+    {
+        $response = $this->client::asForm()->withHeaders(['Cookie' => $this->cookie])->post($this->baseUrl.'user/changepassword', [
+            '_nonce' => $this->nonce,
+            'currentPassword' => $currentPassword,
+            'password' => $newPassword,
+        ]);
+
+        ApiResponseHelper::checkApiResponse($response);
+
+        return $response;
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function siteSettings(bool $likesArePublic, bool $showAds, int $theme, string $userStatus): \Illuminate\Http\Client\Response
+    {
+        $response = $this->client::asForm()->withHeaders(['Cookie' => $this->cookie])->post($this->baseUrl.'user/sitesettings', [
+            '_nonce' => $this->nonce,
+            'likesArePublic' => $likesArePublic,
+            'showAds' => $showAds,
+            'theme' => $theme,
+            'userStatus' => $userStatus,
+        ]);
 
         ApiResponseHelper::checkApiResponse($response);
 
