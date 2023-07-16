@@ -10,7 +10,7 @@ class ApiResponseHelper
     /**
      * @throws RequestException
      */
-    static function checkApiResponse(Response $response): void
+    public static function checkApiResponse(Response $response): void
     {
         if ($response->successful()) {
             return;

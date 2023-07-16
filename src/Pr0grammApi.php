@@ -3,9 +3,9 @@
 namespace Tschucki\Pr0grammApi;
 
 use Illuminate\Http\Client\RequestException;
-use Tschucki\Pr0grammApi\Helpers\ApiResponseHelper;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
+use Tschucki\Pr0grammApi\Helpers\ApiResponseHelper;
 use Tschucki\Pr0grammApi\Resources\Post;
 use Tschucki\Pr0grammApi\Resources\User;
 

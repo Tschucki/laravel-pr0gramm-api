@@ -2,10 +2,8 @@
 
 namespace Tschucki\Pr0grammApi\Resources;
 
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
-use Tschucki\Pr0grammApi\Collections\Pr0grammUser;
 use Tschucki\Pr0grammApi\Helpers\ApiResponseHelper;
 
 class Post

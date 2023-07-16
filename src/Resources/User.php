@@ -2,7 +2,6 @@
 
 namespace Tschucki\Pr0grammApi\Resources;
 
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use Tschucki\Pr0grammApi\Collections\Pr0grammUser;
@@ -55,7 +54,7 @@ class User
     public function info(string $name = null, int $flags = 15): \GuzzleHttp\Promise\PromiseInterface|\Illuminate\Http\Client\Response
     {
 
-        if($name === null) {
+        if ($name === null) {
             $response = $this->client::withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'user/info');
         } else {
             $response = $this->client::withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'profile/info', [
