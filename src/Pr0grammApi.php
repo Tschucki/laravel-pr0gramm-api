@@ -5,9 +5,13 @@ namespace Tschucki\Pr0grammApi;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
+use Tschucki\Pr0grammApi\Collections\Captcha;
 use Tschucki\Pr0grammApi\Helpers\ApiResponseHelper;
 use Tschucki\Pr0grammApi\Resources\Comment;
+use Tschucki\Pr0grammApi\Resources\Inbox;
 use Tschucki\Pr0grammApi\Resources\Post;
+use Tschucki\Pr0grammApi\Resources\Profile;
+use Tschucki\Pr0grammApi\Resources\Tag;
 use Tschucki\Pr0grammApi\Resources\User;
 
 class Pr0grammApi
@@ -55,7 +59,7 @@ class Pr0grammApi
     /**
      * @throws \Exception
      */
-    public function urlDecodedCookie()
+    public function urlDecodedCookie(): string
     {
         if (self::$cookie == null) {
             throw new \Exception('No Pr0gramm cookie found. Please login first or set a cookie in the configs.');
@@ -68,10 +72,9 @@ class Pr0grammApi
      * @throws RequestException
      * @throws \Exception
      */
-    public static function login(string $username, string $password)
+    public static function login(string $username, string $password, $captcha = null, $token = null)
     {
         if (self::loggedIn()['loggedIn']) {
-
             self::logout();
         }
 
@@ -80,6 +83,8 @@ class Pr0grammApi
         $response = self::$client::asForm()->post(self::$baseUrl.'user/login', [
             'name' => $username,
             'password' => $password,
+            'captcha' => $captcha,
+            'token' => $token,
         ]);
 
         if ($response->successful()) {
@@ -88,6 +93,15 @@ class Pr0grammApi
         }
 
         return $response->json();
+    }
+
+    public static function captcha(): Captcha
+    {
+        $response = self::$client::asForm()->get(self::$baseUrl.'user/captcha', [
+            'bust' => mt_rand() / mt_getrandmax(),
+        ]);
+
+        return new Captcha($response);
     }
 
     /**
@@ -142,5 +156,29 @@ class Pr0grammApi
     public static function comment(): Comment
     {
         return new Comment(self::$baseUrl, self::$cookie, self::$nonce);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public static function profile(): Profile
+    {
+        return new Profile(self::$baseUrl, self::$cookie);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public static function tag(): Tag
+    {
+        return new Tag(self::$baseUrl, self::$cookie, self::$nonce);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public static function inbox(): Inbox
+    {
+        return new Inbox(self::$baseUrl, self::$cookie, self::$nonce);
     }
 }

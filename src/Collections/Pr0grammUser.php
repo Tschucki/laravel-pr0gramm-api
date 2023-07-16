@@ -21,7 +21,7 @@ class Pr0grammUser implements JsonSerializable
 
     public int $ts;
 
-    public $registeredDate;
+    public ?Carbon $registeredDate;
 
     public ?Carbon $timestamp;
 
