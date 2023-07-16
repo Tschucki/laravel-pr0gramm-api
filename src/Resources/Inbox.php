@@ -4,7 +4,6 @@ namespace Tschucki\Pr0grammApi\Resources;
 
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
-use Tschucki\Pr0grammApi\Enums\Vote;
 use Tschucki\Pr0grammApi\Helpers\ApiResponseHelper;
 
 class Inbox
