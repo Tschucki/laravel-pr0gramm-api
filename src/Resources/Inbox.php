@@ -79,4 +79,20 @@ class Inbox
 
         return $response;
     }
+
+    /**
+     * @throws RequestException
+     */
+    public function post(string $comment, string $recipientName): \Illuminate\Http\Client\Response
+    {
+        $response = $this->client::asForm()->withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'inbox/post', [
+            '_nonce' => $this->nonce,
+            'comment' => $comment,
+            'recipientName' => $recipientName,
+        ]);
+
+        ApiResponseHelper::checkApiResponse($response);
+
+        return $response;
+    }
 }
