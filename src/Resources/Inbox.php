@@ -80,36 +80,4 @@ class Inbox
 
         return $response;
     }
-
-    /**
-     * @throws RequestException
-     */
-    public function add(int $itemId, string $tags): \Illuminate\Http\Client\Response
-    {
-        $response = $this->client::asForm()->withHeaders(['Cookie' => $this->cookie])->post($this->baseUrl.'tags/add', [
-            '_nonce' => $this->nonce,
-            'id' => $itemId,
-            'tags' => $tags,
-        ]);
-
-        ApiResponseHelper::checkApiResponse($response);
-
-        return $response;
-    }
-
-    /**
-     * @throws RequestException
-     */
-    public function vote(int $tagId, Vote $vote): \Illuminate\Http\Client\Response
-    {
-        $response = $this->client::asForm()->withHeaders(['Cookie' => $this->cookie])->post($this->baseUrl.'tags/vote', [
-            '_nonce' => $this->nonce,
-            'id' => $tagId,
-            'vote' => $vote->value,
-        ]);
-
-        ApiResponseHelper::checkApiResponse($response);
-
-        return $response;
-    }
 }
