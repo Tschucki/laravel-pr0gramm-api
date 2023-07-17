@@ -33,9 +33,9 @@ class Inbox
     /**
      * @throws RequestException
      */
-    public function all(): \Illuminate\Http\Client\Response
+    public function all(array $settings = []): \Illuminate\Http\Client\Response
     {
-        $response = $this->client::withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'inbox/all');
+        $response = $this->client::withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'inbox/all', $settings);
 
         ApiResponseHelper::checkApiResponse($response);
 
@@ -59,9 +59,9 @@ class Inbox
     /**
      * @throws RequestException
      */
-    public function conversations(): \Illuminate\Http\Client\Response
+    public function conversations(array $settings = []): \Illuminate\Http\Client\Response
     {
-        $response = $this->client::withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'inbox/conversations');
+        $response = $this->client::withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'inbox/conversations', $settings);
 
         ApiResponseHelper::checkApiResponse($response);
 
@@ -71,9 +71,9 @@ class Inbox
     /**
      * @throws RequestException
      */
-    public function comments(): \Illuminate\Http\Client\Response
+    public function comments(array $settings = []): \Illuminate\Http\Client\Response
     {
-        $response = $this->client::withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'inbox/comments');
+        $response = $this->client::withHeaders(['Cookie' => $this->cookie])->get($this->baseUrl.'inbox/comments', $settings);
 
         ApiResponseHelper::checkApiResponse($response);
 
