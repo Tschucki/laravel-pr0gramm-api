@@ -73,4 +73,34 @@ class Comment
 
         return $response;
     }
+
+    /**
+     * @throws RequestException
+     */
+    public function fav(int $commentId): \Illuminate\Http\Client\Response
+    {
+        $response = $this->client::asForm()->withHeaders(['Cookie' => $this->cookie])->post($this->baseUrl.'comments/fav', [
+            '_nonce' => $this->nonce,
+            'id' => $commentId,
+        ]);
+
+        ApiResponseHelper::checkApiResponse($response);
+
+        return $response;
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function unfav(int $commentId): \Illuminate\Http\Client\Response
+    {
+        $response = $this->client::asForm()->withHeaders(['Cookie' => $this->cookie])->post($this->baseUrl.'comments/unfav', [
+            '_nonce' => $this->nonce,
+            'id' => $commentId,
+        ]);
+
+        ApiResponseHelper::checkApiResponse($response);
+
+        return $response;
+    }
 }
